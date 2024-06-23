@@ -43,7 +43,6 @@ const parsePersonalDataFromProfilePage = (data) => {
     if ($(".profile-bottom").length === 0) {
         throw "Not found";
     }
-    console.log(html);
     const name = $(".profile-top-title")[0].children[0].data;
     const federation = $(".profile-top-info__block__row__data")[1].children[0].data;
     const birth_year = parseInt($(".profile-top-info__block__row__data")[3].children[0].data, 10);
