@@ -211,6 +211,35 @@ Get all the information provided by FIDE about the player, including the previou
 }
 ```
 
+
+### <span style="color:green">GET&nbsp;</span> Player Games By Month
+
+```
+/player/{fide_number}/games/{date}
+```
+
+Get all the games of a player from a certain month (yyyy-mm-dd).
+
+```json
+{
+   [
+    {
+        "opponent_name": "Doe, John",
+        "opponent_elo": "1936 ",
+        "opponent_country": "ESP",
+        "game_result": "1.00",
+        "rating_variation": "1.60"
+    },
+    {
+        "opponent_name": "Doe, Jane",
+        "opponent_elo": "1933 ",
+        "opponent_country": "POR",
+        "game_result": "1.00",
+        "rating_variation": "1.60"
+    }
+   ]
+}
+```
 ## Tests
 
 To run the test suite, install the project's dependencies and run `npm test`:

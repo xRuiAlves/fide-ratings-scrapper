@@ -101,3 +101,4 @@ public
 
 # stryker temp files
 .stryker-tmp
+.vscode/launch.json

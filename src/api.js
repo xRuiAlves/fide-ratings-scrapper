@@ -5,6 +5,7 @@ const timeout = require("express-timeout-handler");
 const app = express();
 const {
     getPlayerElo, getPlayerFullInfo, getPlayerHistory, getPlayerPersonalData, getPlayerRank,
+    getPlayerGamesByMonth,
 } = require("./main");
 
 /**
@@ -113,6 +114,18 @@ app.get("/player/:fide_num/history/", (req, res) => {
 });
 
 /**
+ * GET player games by month endpoint
+ */
+app.get("/player/:fide_num/games/:date", (req, res) => {
+    const  date  = req.params.date;
+    const  fide_num  = req.params.fide_num;
+
+    getPlayerGamesByMonth(fide_num, date)
+        .then((data) => res.json(data))
+        .catch((err) => playerEndpointsErrorHandler(err, res));
+});
+
+/**
  * Page not found fallback
  */
 app.get("*", (_req, res) => res.status(404).send(""));
@@ -132,7 +145,7 @@ app.listen(port, () =>
 const playerEndpointsErrorHandler = (err, res) => {
     if (err === "Not found") {
         return res.status(404).json(buildErrorResponse(
-            "Requested player does not exist",
+            "Requested information does not exist",
         ));
     }
     return res.status(500).json(buildErrorResponse(
