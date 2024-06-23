@@ -130,10 +130,10 @@ const parseGamesFromGamesPage = (data) => {
         throw "Not found";
     }
 
-    table_entries.each((index, element) => {
+    $(".list4").each((index, element) => {
         const game_data = $(element).text();
         if(game_data.length>=3){
-            games.push(game_data);
+            games_data.push(game_data);
         };
     });
 
@@ -145,7 +145,7 @@ const parseGamesFromGamesPage = (data) => {
 
 const parseGamesTableToGamesList = (game_list) => {
     const parsedGames = [];
-    for (let i = 0; i < game_list.length; i += 5) {
+    for (let i = 0; i < game_list.length; i += 6) {
         if (i + 4 < game_list.length) {
             const parsedObject = {
                 opponent_name: (game_list[i]).trim(),
