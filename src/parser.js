@@ -149,7 +149,7 @@ const parseGamesTableToGamesList = (game_list) => {
         if (i + 4 < game_list.length) {
             const parsedObject = {
                 opponent_name: (game_list[i]).trim(),
-                opponent_elo: game_list[i + 1],
+                opponent_elo: game_list[i + 1].trim(),
                 opponent_country: game_list[i +2],
                 game_result: game_list[i + 3],
                 rating_variation: game_list[i + 5]
