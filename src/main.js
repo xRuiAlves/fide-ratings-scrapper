@@ -1,7 +1,7 @@
 /* eslint-disable array-callback-return */
-const { fetchProfilePage, fetchHistoryPage } = require("./fideAPI");
+const { fetchProfilePage, fetchHistoryPage, fetchGamesPage } = require("./fideAPI");
 const {
-    parseRankFromProfilePage, parsePersonalDataFromProfilePage, parseEloFromProfilePage, parseHistoryFromHistoryPage,
+    parseRankFromProfilePage, parsePersonalDataFromProfilePage, parseEloFromProfilePage, parseHistoryFromHistoryPage, parseGamesFromGamesPage
 } = require("./parser");
 
 /**
@@ -61,10 +61,24 @@ const getPlayerHistory = async (fide_num) => {
     return parseHistoryFromHistoryPage(data);
 };
 
+/**
+ * Get player history
+ * @param {Integer} fide_num
+ * @returns {JSON} Player history
+ */
+const getPlayerGamesByMonth = async (fide_num, date) => {
+    const data = await fetchGamesPage(fide_num, date);
+    return parseGamesFromGamesPage(data);
+    console.log(data);
+    console.log();
+};
+
+
 module.exports = {
     getPlayerFullInfo,
     getPlayerElo,
     getPlayerHistory,
     getPlayerRank,
     getPlayerPersonalData,
+    getPlayerGamesByMonth
 };

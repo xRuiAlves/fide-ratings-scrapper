@@ -1,7 +1,7 @@
 /* eslint-disable array-callback-return */
 const cheerio = require("cheerio");
 const { parseDate } = require("./utils");
-
+const puppeteer = require('puppeteer');
 /**
  * Parse player ranking from FIDE player page
  * @param {Object} data
@@ -39,10 +39,11 @@ const parseRankFromProfilePage = (data) => {
  */
 const parsePersonalDataFromProfilePage = (data) => {
     const $ = cheerio.load(data);
+    const html = $.html();
     if ($(".profile-bottom").length === 0) {
         throw "Not found";
     }
-
+    console.log(html);
     const name = $(".profile-top-title")[0].children[0].data;
     const federation = $(".profile-top-info__block__row__data")[1].children[0].data;
     const birth_year = parseInt($(".profile-top-info__block__row__data")[3].children[0].data, 10);
@@ -113,9 +114,58 @@ const parseHistoryFromHistoryPage = (data) => {
     return history;
 };
 
+/**
+ * Parse player games from FIDE calculations page
+ * @param {Object} data
+ * @throws {String}
+ * @returns {JSON} Player history
+ */
+
+const parseGamesFromGamesPage = (data) => {
+    const $ = cheerio.load(data);
+    const games_data = [];
+    const table_entries = $(".list4");
+
+    if (table_entries.length === 0) {
+        throw "Not found";
+    }
+
+    table_entries.each((index, element) => {
+        const game_data = $(element).text();
+        if(game_data.length>=3){
+            games.push(game_data);
+        };
+    });
+
+    const parsed_games_data = parseGamesTableToGamesList(games_data);
+
+    return parsed_games_data;
+    
+};
+
+const parseGamesTableToGamesList = (game_list) => {
+    const parsedGames = [];
+    for (let i = 0; i < game_list.length; i += 5) {
+        if (i + 4 < game_list.length) {
+            const parsedObject = {
+                opponent_name: (game_list[i]).trim(),
+                opponent_elo: game_list[i + 1],
+                opponent_country: game_list[i +2],
+                game_result: game_list[i + 3],
+                rating_variation: game_list[i + 5]
+            };
+            parsedGames.push(parsedObject);
+        } else {
+            console.warn("Not enough elements to form another complete object.");
+        }
+    }
+    return parsedGames;
+}
+
 module.exports = {
     parseRankFromProfilePage,
     parsePersonalDataFromProfilePage,
     parseEloFromProfilePage,
     parseHistoryFromHistoryPage,
+    parseGamesFromGamesPage
 };
